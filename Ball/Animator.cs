@@ -20,16 +20,17 @@ namespace Ball
         {
             int d = 50;
             Random rnd = new Random();
-            int x = rnd.Next(5, containerSize.Width - d);
             int y = rnd.Next(100, containerSize.Height - d);
-            c = new Circle(d, x, x);
+            int x = rnd.Next(10, containerSize.Width - d);
+            c = new Circle(d, x, y);
+
             ContainerSize = containerSize;
         }
 
         public void Start()
         {
             Random rnd = new Random();
-            int dx = rnd.Next(-10, 10);
+            int dx = rnd.Next(-1000, 10);
             int dy = rnd.Next(-10, 10);
             int normal = dx * dx + dy * dy;
 
