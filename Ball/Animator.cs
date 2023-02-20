@@ -17,7 +17,7 @@ namespace Ball
         {
             int d = 50;
             Random rnd = new Random();
-            int x = rnd.Next(0, containerSize.Width - d);
+            int x = rnd.Next(10, containerSize.Width - d);
             int y = rnd.Next(0, containerSize.Height - d);
             c = new Circle(d, x, y);
             ContainerSize = containerSize;
@@ -26,7 +26,7 @@ namespace Ball
         public void Start()
         {
             Random rnd = new Random();
-            int dx = rnd.Next(-10, 10);
+            int dx = rnd.Next(-1000, 10);
             int dy = rnd.Next(-10, 10);
             int normal = dx * dx + dy * dy;
 
