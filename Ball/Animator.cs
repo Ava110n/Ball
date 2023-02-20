@@ -9,6 +9,9 @@ namespace Ball
     public class Animator
     {
         private Circle c;
+        public int a = 100;
+
+
         private Thread? t = null;
         public bool IsAlive => t == null || t.IsAlive;
         public Size ContainerSize { get; set; }
@@ -17,9 +20,10 @@ namespace Ball
         {
             int d = 50;
             Random rnd = new Random();
+            int y = rnd.Next(100, containerSize.Height - d);
             int x = rnd.Next(10, containerSize.Width - d);
-            int y = rnd.Next(0, containerSize.Height - d);
             c = new Circle(d, x, y);
+
             ContainerSize = containerSize;
         }
 
