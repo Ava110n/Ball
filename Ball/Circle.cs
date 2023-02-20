@@ -27,7 +27,7 @@ namespace Ball
 
         public Circle(int diam, int x, int y)
         {
-            this.diam = 2*diam;
+            this.diam = diam;
             this.x = x;
             this.y = y;
             this.Color = Color.FromArgb(r.Next(255), r.Next(255), r.Next(255));

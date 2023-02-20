@@ -24,7 +24,7 @@
                     bg = BufferedGraphicsManager.Current.Allocate(
                         mainGraphics, new Rectangle(new Point(0, 0), ContainerSize)
                     );
-                    objectsPainted = 6;
+                    objectsPainted = 0;
                 }
             }
         }
