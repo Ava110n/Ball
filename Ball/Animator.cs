@@ -13,6 +13,8 @@ namespace Ball
         private Circle c;
         public int a = 100;
 
+        public Circle C => c;
+
 
         private Thread? t = null;
         public bool IsAlive => t == null || t.IsAlive;
@@ -33,38 +35,40 @@ namespace Ball
         public void Start()
         {
             Random rnd = new Random();
-            int dx, dy;
-            do
-            {
-                dx = rnd.Next(-10, 10);
-                dy = rnd.Next(-10, 10);
-            } while (dx == 0 && dy == 0);
-            int normal = Convert.ToInt32(Math.Sqrt(dx * dx + dy * dy));
-
             t = new Thread(() =>
             {
+                c.Dx = rnd.Next(-5, 6);
+                int sign = rnd.Next(0, 2);
+                if (sign == 0) { sign = -1; }
+                c.Dy = sign * Convert.ToInt32(Math.Sqrt(25 - c.Dx * c.Dx));
+                while (c.Dx == 0 && c.Dy == 0)
+                {
+                    c.Dx = rnd.Next(-1, 1);
+                    c.Dy = rnd.Next(-1, 1);
+                }
                 while (true)
                 {
                     Thread.Sleep(30);
-                    c.Move((dx*10) / normal, (dy * 10) / normal);
-                    is_wall(ref dx, ref dy);
+                    c.Move();
+                    wall_check();
                 }
             });
             t.IsBackground = true;
             t.Start();
         }
 
-        public void is_wall(ref int dx, ref int dy)
+        public void wall_check()
         {
-            if(c.X + c.Diam >= ContainerSize.Width || c.X <= 0)
+            if (c.X + c.Diam >= ContainerSize.Width || c.X <= 0)
             {
-                dx = -dx;
+                c.Dx = -c.Dx;
             }
             if (c.Y + c.Diam >= ContainerSize.Height || c.Y <= 0)
             {
-                dy = -dy;
+                c.Dy = -c.Dy;
             }
         }
+        доступно контекстное меню
 
         public void PaintCircle(Graphics g)
         {

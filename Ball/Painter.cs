@@ -8,7 +8,6 @@
         private Thread t;
         private Graphics mainGraphics;
         private BufferedGraphics bg;
-        private bool isAlive;
 
         private volatile int objectsPainted = 0;
         public Thread PainterThread => t;
@@ -56,14 +55,12 @@
 
         public void Start()
         {
-            isAlive = true;
             t = new Thread(() =>
             {
                 try
                 {
-                    while (isAlive)
+                    while (true)
                     {
-                        animators.RemoveAll(it => !it.IsAlive);
                         lock (locker)
                         {
                             if (PaintOnBuffer())
@@ -71,7 +68,7 @@
                                 bg.Render(MainGraphics);
                             }
                         }
-                        if (isAlive) Thread.Sleep(30);
+                        //if (isAlive) Thread.Sleep(30);
                     }
                 }
                 catch (ArgumentException e) { }
@@ -82,8 +79,12 @@
 
         public void Stop()
         {
-            isAlive = false;
             t.Interrupt();
+        }
+
+        private double dist(Circle A, Circle B)
+        {
+            return Math.Sqrt((A.X - B.X) * (A.X - B.X) + (A.Y - B.Y) * (A.Y - B.Y));
         }
 
         private bool PaintOnBuffer()
