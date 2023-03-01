@@ -1,4 +1,6 @@
-﻿namespace Ball
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Ball
 {
     public class Painter
     {
@@ -66,6 +68,7 @@
                             if (PaintOnBuffer())
                             {
                                 bg.Render(MainGraphics);
+                                check_crash();
                             }
                         }
                         //if (isAlive) Thread.Sleep(30);
@@ -86,6 +89,30 @@
         {
             return Math.Sqrt((A.X - B.X) * (A.X - B.X) + (A.Y - B.Y) * (A.Y - B.Y));
         }
+
+        private void check_crash()
+        {
+            foreach(var animator1 in animators)
+            {
+                foreach (var animator2 in animators)
+                {
+                    if (!animator1.Equals(animator2))
+                    {
+                        if (dist(animator1.C, animator2.C) <= animator1.C.Diam)
+                        {
+                            int x = animator1.C.Dx;
+                            int y = animator1.C.Dy;
+                            animator1.C.Dx = 3;
+                            animator1.C.Dy = 4;
+                            animator2.C.Dx = -4;
+                            animator2.C.Dy = -3;
+                        }
+                    }
+                }
+            }
+        }
+
+        
 
         private bool PaintOnBuffer()
         {

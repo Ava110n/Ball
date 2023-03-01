@@ -68,7 +68,6 @@ namespace Ball
                 c.Dy = -c.Dy;
             }
         }
-        доступно контекстное меню
 
         public void PaintCircle(Graphics g)
         {
