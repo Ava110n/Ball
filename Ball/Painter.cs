@@ -6,8 +6,10 @@ namespace Ball
     {
         private object locker = new();
         private List<Animator> animators = new();
+        private List<Square> squares = new();  
         private Size containerSize;
         private Thread t;
+        private Thread sqT;
         private Graphics mainGraphics;
         private BufferedGraphics bg;
 
@@ -53,6 +55,30 @@ namespace Ball
             var a = new Animator(ContainerSize);
             animators.Add(a);
             a.Start();
+        }
+
+        public void AddSquare(MouseEventArgs e)
+        {
+            Square square = new Square(e.X, e.Y);
+            squares.Add(square);
+            square.Paint(mainGraphics);
+            sqT.Start(AddCircle());
+    }
+
+        public object AddCircle()
+        {
+            while(true)
+            {
+                lock (locker)
+                {
+                    Random r = new();
+                    Square square = new Square(r.Next(100), r.Next(100));
+                    square.Paint(mainGraphics);
+                    
+                }
+                Thread.Sleep(1000);
+            }
+            return 1;
         }
 
         public void Start()
