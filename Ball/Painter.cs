@@ -6,7 +6,7 @@ namespace Ball
     {
         private object locker = new();
         private List<Animator> animators = new();
-        private List<Square> squares = new();  
+        private List<Square> squares = new();
         private Size containerSize;
         private Thread t;
         private Thread sqT;
@@ -57,54 +57,77 @@ namespace Ball
             a.Start();
         }
 
+
         public void AddSquare(MouseEventArgs e)
         {
             Square square = new Square(e.X, e.Y);
-            squares.Add(square);
-            square.Paint(mainGraphics);
-            sqT.Start(AddCircle());
-    }
-
-        public object AddCircle()
-        {
-            while(true)
+            
+            try
             {
-                lock (locker)
-                {
-                    Random r = new();
-                    Square square = new Square(r.Next(100), r.Next(100));
-                    square.Paint(mainGraphics);
-                    
-                }
-                Thread.Sleep(1000);
+                squares.Add(square);
+                square.Paint(mainGraphics);
             }
-            return 1;
+            catch (Exception exception) { }
+            AddCircle(e);
         }
 
-        public void Start()
+        public void AddCircle(MouseEventArgs e)
         {
-            t = new Thread(() =>
+            sqT = new Thread(() =>
             {
                 try
                 {
                     while (true)
                     {
-                        lock (locker)
-                        {
-                            if (PaintOnBuffer())
+                        //lock (locker)
+                        //{
+
+                            var a = new Animator(ContainerSize);
+                            animators.Add(a);
+                            a.Start();
+                            //Thread.Sleep(3000);
+                        //}
+                        Thread.Sleep(3000);
+                    }
+
+                }
+                catch (ArgumentException e) { }
+                
+            });
+            
+            sqT.IsBackground = true;
+            sqT.Start();
+                //return 1;
+            
+        }
+
+        public void ShowCircle()
+		{
+            t = new Thread(() =>
+            {
+            try
+            {
+                while (true)
+                {
+                    lock (locker)
+                    {
+                        if (PaintOnBuffer())
                             {
                                 bg.Render(MainGraphics);
-                                check_crash();
                             }
                         }
-                        //if (isAlive) Thread.Sleep(30);
                     }
                 }
                 catch (ArgumentException e) { }
             });
             t.IsBackground = true;
             t.Start();
+
         }
+    
+
+        
+
 
         public void Stop()
         {
@@ -142,12 +165,19 @@ namespace Ball
 
         private bool PaintOnBuffer()
         {
+            Thread.Sleep(10);
             objectsPainted = 0;
-            var objectsCount = animators.Count;
+            var objectsCount = animators.Count + squares.Count;
             bg.Graphics.Clear(Color.White);
             foreach (var animator in animators)
             {
                 animator.PaintCircle(bg.Graphics);
+                objectsPainted++;
+            }
+
+            foreach (var square in squares)
+            {
+                square.Paint(bg.Graphics);
                 objectsPainted++;
             }
 

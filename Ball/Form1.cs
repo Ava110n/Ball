@@ -6,12 +6,14 @@ namespace Ball
     {
         private Painter p;
         bool flag = false;
+        object locker = new();
 
         public Form1()
         {
             InitializeComponent();
             p = new Painter(mainPanel.CreateGraphics());
             //p.Start();
+            p.ShowCircle();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -35,7 +37,9 @@ namespace Ball
         {
             if (flag)
             {
+                
                 p.AddSquare(e);
+                
             }     
             flag = false;
         }
